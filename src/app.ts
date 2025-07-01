@@ -3,9 +3,10 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
-import { DataSource } from 'typeorm';
 import { config } from 'dotenv';
 import path from 'path';
+import { AppDataSource } from './config/database';
+import authRoutes from './routes/auth';
 
 // Load environment variables
 config();
@@ -42,8 +43,11 @@ app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
-// API routes will be added here
-app.use('/api', (req, res) => {
+// API routes
+app.use('/api/auth', authRoutes);
+
+// Default API route
+app.get('/api', (req, res) => {
   res.json({ message: 'Barber API is running!' });
 });
 
@@ -60,11 +64,26 @@ app.use('*', (req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📋 Environment: ${process.env.NODE_ENV}`);
-  console.log(`🏥 Health check: http://localhost:${PORT}/health`);
-});
+// Initialize database and start server
+const startServer = async () => {
+  try {
+    // Initialize database connection
+    await AppDataSource.initialize();
+    console.log('✅ Database connection established');
+
+    // Start server
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+      console.log(`📋 Environment: ${process.env.NODE_ENV}`);
+      console.log(`🏥 Health check: http://localhost:${PORT}/health`);
+      console.log(`🔐 Auth endpoints: http://localhost:${PORT}/api/auth`);
+    });
+  } catch (error) {
+    console.error('❌ Failed to start server:', error);
+    process.exit(1);
+  }
+};
+
+startServer();
 
 export default app;

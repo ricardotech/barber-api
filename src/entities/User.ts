@@ -21,7 +21,7 @@ export class User {
   role: 'client' | 'barber' | 'admin';
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  fullName: string;
+  fullName: string | null;
 
   @Column({ type: 'boolean', default: true })
   isActive: boolean;
