@@ -10,21 +10,9 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USERNAME || 'barber_app',
   password: process.env.DB_PASSWORD || 'secure_password',
   database: process.env.DB_DATABASE || 'barber_db',
-  synchronize: false, // Always false to use migrations
+  synchronize: false, // Always false in production
   logging: process.env.NODE_ENV === 'development',
-  entities: [
-    process.env.NODE_ENV === 'production' 
-      ? 'dist/entities/*.js' 
-      : 'src/entities/*.ts'
-  ],
-  migrations: [
-    process.env.NODE_ENV === 'production' 
-      ? 'dist/migrations/*.js' 
-      : 'src/migrations/*.ts'
-  ],
-  subscribers: [
-    process.env.NODE_ENV === 'production' 
-      ? 'dist/subscribers/*.js' 
-      : 'src/subscribers/*.ts'
-  ],
+  entities: ['src/entities/*.ts'],
+  migrations: ['src/migrations/*.ts'],
+  subscribers: ['src/subscribers/*.ts'],
 });
