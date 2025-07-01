@@ -7,6 +7,9 @@ import { config } from 'dotenv';
 import path from 'path';
 import { AppDataSource } from './config/database';
 import authRoutes from './routes/auth';
+import barbershopRoutes from './routes/barbershops';
+import amenityRoutes from './routes/amenities';
+import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 
 // Load environment variables
 config();
@@ -45,24 +48,27 @@ app.get('/health', (req, res) => {
 
 // API routes
 app.use('/api/auth', authRoutes);
+app.use('/api/barbershops', barbershopRoutes);
+app.use('/api/amenities', amenityRoutes);
 
 // Default API route
 app.get('/api', (req, res) => {
-  res.json({ message: 'Barber API is running!' });
-});
-
-// Error handling middleware
-app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  console.error(err.stack);
-  res.status(500).json({ 
-    error: process.env.NODE_ENV === 'production' ? 'Internal server error' : err.message 
+  res.json({ 
+    message: 'Barber API is running!',
+    version: '1.0.0',
+    endpoints: {
+      auth: '/api/auth',
+      barbershops: '/api/barbershops',
+      amenities: '/api/amenities'
+    }
   });
 });
 
+// Error handling middleware
+app.use(errorHandler);
+
 // 404 handler
-app.use('*', (req, res) => {
-  res.status(404).json({ error: 'Route not found' });
-});
+app.use(notFoundHandler);
 
 // Initialize database and start server
 const startServer = async () => {
