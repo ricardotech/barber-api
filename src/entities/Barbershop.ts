@@ -29,6 +29,9 @@ export class Barbershop {
   @Column({ type: 'text', nullable: true })
   about: string;
 
+  @Column({ type: 'json', nullable: true })
+  images: string[];
+
   @CreateDateColumn()
   createdAt: Date;
 

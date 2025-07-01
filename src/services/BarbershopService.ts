@@ -13,6 +13,7 @@ export interface CreateBarbershopDto {
   coverImageUrl?: string;
   about?: string;
   amenityIds?: string[];
+  images?: string[];
   openingHours?: {
     day: string;
     openTime?: string;
@@ -29,6 +30,7 @@ export interface UpdateBarbershopDto {
   coverImageUrl?: string;
   about?: string;
   amenityIds?: string[];
+  images?: string[];
   openingHours?: {
     day: string;
     openTime?: string;
@@ -103,6 +105,7 @@ export class BarbershopService {
       logoUrl: data.logoUrl,
       coverImageUrl: data.coverImageUrl,
       about: data.about,
+      images: data.images || [],
       createdBy: userId,
       owner: user
     });
@@ -154,7 +157,8 @@ export class BarbershopService {
       phone: updates.phone ?? barbershop.phone,
       logoUrl: updates.logoUrl ?? barbershop.logoUrl,
       coverImageUrl: updates.coverImageUrl ?? barbershop.coverImageUrl,
-      about: updates.about ?? barbershop.about
+      about: updates.about ?? barbershop.about,
+      images: updates.images ?? barbershop.images
     });
 
     if (updates.amenityIds !== undefined) {

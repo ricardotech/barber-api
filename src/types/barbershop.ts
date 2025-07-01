@@ -58,6 +58,11 @@ export class CreateBarbershopDto {
   @ValidateNested({ each: true })
   @Type(() => CreateOpeningHourDto)
   openingHours?: CreateOpeningHourDto[];
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  images?: string[];
 }
 
 export class UpdateBarbershopDto {
@@ -99,6 +104,11 @@ export class UpdateBarbershopDto {
   @ValidateNested({ each: true })
   @Type(() => CreateOpeningHourDto)
   openingHours?: CreateOpeningHourDto[];
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  images?: string[];
 }
 
 export class BarbershopAmenityDto {
@@ -140,6 +150,7 @@ export interface BarbershopResponse {
   };
   amenities: AmenityResponse[];
   openingHours: OpeningHourResponse[];
+  images?: string[];
 }
 
 export interface OpeningHourResponse {

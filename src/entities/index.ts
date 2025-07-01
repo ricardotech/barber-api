@@ -1,4 +1,4 @@
-export { User } from './User';
-export { Barbershop } from './Barbershop';
-export { Amenity } from './Amenity';
-export { OpeningHour } from './OpeningHour';
+export { User } from './User.js';
+export { Barbershop } from './Barbershop.js';
+export { Amenity } from './Amenity.js';
+export { OpeningHour } from './OpeningHour.js';

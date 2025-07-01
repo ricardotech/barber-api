@@ -3,6 +3,7 @@ import { barbershopController } from '../controllers/BarbershopController';
 import { authenticate, authorize } from '../middleware/auth';
 import { validateBody, validateQuery, validateUUID } from '../middleware/validation';
 import { CreateBarbershopDto, UpdateBarbershopDto, BarbershopQueryDto, BarbershopAmenityDto } from '../types/barbershop';
+import { fileStorageService } from '../services/FileStorageService';
 
 const router = Router();
 
@@ -23,5 +24,10 @@ router.delete('/:id', authorize(['barber', 'admin']), validateUUID('id'), barber
 // Amenity management routes
 router.post('/:id/amenities', authorize(['barber', 'admin']), validateUUID('id'), validateBody(BarbershopAmenityDto), barbershopController.addAmenities);
 router.delete('/:id/amenities/:amenityId', authorize(['barber', 'admin']), validateUUID('id'), validateUUID('amenityId'), barbershopController.removeAmenity);
+
+// Image upload routes
+const uploadMiddleware = fileStorageService.getBarbershopUploadConfig();
+router.post('/:id/images', authorize(['barber', 'admin']), validateUUID('id'), uploadMiddleware.array('images', 5), barbershopController.uploadBarbershopImages);
+router.delete('/:id/images', authorize(['barber', 'admin']), validateUUID('id'), barbershopController.deleteBarbershopImage);
 
 export default router;

@@ -42,7 +42,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // Health check endpoint
-app.get('/health', (req, res) => {
+app.get('/health', (_, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
@@ -52,7 +52,7 @@ app.use('/api/barbershops', barbershopRoutes);
 app.use('/api/amenities', amenityRoutes);
 
 // Default API route
-app.get('/api', (req, res) => {
+app.get('/api', (_, res) => {
   res.json({ 
     message: 'Barber API is running!',
     version: '1.0.0',
